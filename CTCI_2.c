@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
 
 /*
  	My first thought here is to create a temporary char array that I can write into, calculate
- 	the length of the given string so I can get my left and right incides set up, and then swap
+ 	the length of the given string so I can get my left and right indices set up, and then swap
  	the left and right characters as long the left index is to the left of the right index. 
 
  	This will work for strings of even or odd length. The run time of this function is O(n).
