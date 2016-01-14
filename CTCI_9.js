@@ -87,20 +87,23 @@ LinkedList.listDump();
 */
 
 LinkedList.removeDup = function() {
-	var n1 = this.root, n2 = null;
-	var seen = [20], idx = 0; //we assume a maximum number of unique nodes
+	if(this.root == null) return; //return immediately as there is no work to do
 
-	seen[idx] = n1.value; //first item will auto populate in seen array 
-	idx++;
+	//n1 will lead, n2 will follow	
+	var n1 = this.root, n2 = null;
+	//we will use a hash table to keep track of seen elements as lookup time is O(1);
+	var seen = []; //we assume a maximum number of unique nodes
+
+	//seen elements get a value of 1; newly seen elements are by default null until set
+	seen['' + n1.value] = 1; //we automatically see the first item
 	for(var i = 0; i < this.numNodes; i++) {
 		//we check to see we're not on the first node
 		if(i > 0) {
-			if(seen.indexOf(n1.value) != -1) {
+			if(seen['' + n1.value] == 1) {
 				//this node is a duplicate
 				n2.next = n1.next; 
 			} else {
-				seen[idx] = n1.value;
-				idx++; 
+				seen['' + n1.value] = 1;
 				n2 = n1; 
 			}
 		}
@@ -111,8 +114,22 @@ LinkedList.removeDup = function() {
 
 /*
 	The algorithm works in O(n) time because we iterate through all n elements of the linked list once.
+	In my first run through this problem, seen was an array on which I used the indexOf function to determine 
+	if a value already existed in it. This worked, but is less efficient than using a hash table since the 
+	only way to determine if a value exists in an unsorted array is by performing a linear search which is 
+	O(n). A hash table look up is O(1).
 */
 
 LinkedList.removeDup();
 console.log("\nAfter removing duplicates: \n");
 LinkedList.listDump();
+
+/*
+	Final note: 
+	I was curious by which means converting an int into a string was fastest in JavaScript. Multiple times I set the 
+	hashtable values to one or check if they are one, but first I must convert the n1.value into a string for it to work. 
+	Several methods are possible: n1.toString(), String(n1), or '' + n1; Speeds seem to vary from browser to browser. 
+	There is a great stackoverflow response about this here: http://stackoverflow.com/questions/5765398/whats-the-best-way-to-convert-a-number-to-a-string-in-javascript
+
+	If speed isnt an issue then I'd recommend using toString() for code clarity.
+*/
