@@ -78,7 +78,7 @@ var LinkedList = {
 
 LinkedList.kthToLast = function(k) {
 	//we will return early if we are asking for a node that is out of bounds of our list 
-	if(k - 1 > this.numNodes) return;
+	if(k - 1 > this.numNodes) return null;
 
 	var temp = this.root;
 
@@ -90,7 +90,7 @@ LinkedList.kthToLast = function(k) {
 	//number of times we need to move back
 	var num = k - 1;
 	while(num > 0) {
-		temp = temp.prev;
+		temp = temp.prev; //this solution assumes you have a doubly-linked list, which is what the book does as well
 		num--;
 	}
 
@@ -108,3 +108,49 @@ for(var i = 0; i < 20; i++) {
 LinkedList.listDump();
 
 console.log("\nSecond to last item is: " + LinkedList.kthToLast(2));
+
+/*
+	Note: my method works - it gives us the correct node and it's fairly effecient (O(n)), however there is a better way 
+	according to the author - I should have thought of this given my solution to the last question! 
+
+	The idea is to use the same leader/follower technique except instead of keeping the follower one node behind the leader,
+	we keep the follower k nodes behind the leader. That way when the leader hits the end of the linked list, the follower 
+	is on node n - k, or the kth to last element!
+*/
+
+LinkedList.kthToLastBetter = function (k) {
+	if(k > this.numNodes) return null;
+
+	var leader = this.root, follower = null;
+	var follow = 0;
+
+	while(leader.next != null) {
+		//we only want to move when the leader had moved forward k spaces 
+		if(follow % k == 0) {
+			follower = leader;
+		}
+		leader = leader.next;
+		follow++;
+	}
+
+	return follower.value;
+}
+
+console.log("Second to last item is still: " + LinkedList.kthToLastBetter(2));
+
+/*
+	Now this method of solving the problem is still O(n) because we do need to move through the whole list,
+	but it will go through potentially half as many nodes. Remember my method is technically O(2n) because 
+	the user might ask for the first node, in which case my algorithm will travserse the list until the end,
+	and then traverse the list back. For a small list, the difference is negligable. But say there are 10 billion 
+	items in the list - my algorithm will traverse 20 billion nodes at most; this algorithm will traverse 10 billion. 
+*/
+
+/*
+	Final note: there are also two really trivial solutions to this problem that make assumptions:
+		
+		- if you have the length of the linked list, then you can simply iterate to the length - kth node and return its value 
+		
+		- you can also define the linked list object to keep track of the last node. If the linked list is also doubly-linked 
+		then all you need to do is travel back k nodes, which makes the algorithm O(k), which may be really fast if k < n
+*/
