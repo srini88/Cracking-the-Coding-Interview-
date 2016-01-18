@@ -12,7 +12,8 @@ var LinkedList = {
 		if(this.root == null) {
 			this.root = {
 				value: val,
-				next: null
+				next: null,
+				prev: null
 			}
 			this.numNodes++;
 			return;
@@ -62,6 +63,17 @@ var LinkedList = {
 
 	getRoot: function() {
 		return this.root;
+	}, 
+
+	at: function(idx) {
+		if(idx > this.numNodes) return false;
+
+		var temp = this.root;
+		for(var i = 0; i < idx; i++) {
+			temp = temp.next;
+		}
+
+		return temp.value;
 	}
 }
 
