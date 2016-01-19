@@ -74,6 +74,17 @@ var LinkedList = {
 		}
 
 		return temp.value;
+	}, 
+
+	nodeAt: function(idx) {
+		if(idx > this.numNodes) return false;
+
+		var temp = this.root;
+		for(var i = 0; i < idx; i++) {
+			temp = temp.next;
+		}
+
+		return temp;
 	}
 }
 
